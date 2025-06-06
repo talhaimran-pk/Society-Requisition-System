@@ -8,8 +8,8 @@ plugins {
 android {
     namespace = "com.example.society_requisition_system"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
-
+    ndkVersion = "27.2.12479018"
+    
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
