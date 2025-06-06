@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../widgets/custom_navbar.dart';
+// import '../../widgets/custom_navbar.dart';
 
 class ReviewRequisitionScreen extends StatefulWidget {
   const ReviewRequisitionScreen({Key? key}) : super(key: key);
@@ -9,18 +9,18 @@ class ReviewRequisitionScreen extends StatefulWidget {
 }
 
 class _ReviewRequisitionScreenState extends State<ReviewRequisitionScreen> {
-  int _currentIndex = 0;
+  // int _currentIndex = 0;
   final TextEditingController _commentController = TextEditingController();
 
-  void _onNavBarTap(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-    // TODO: Implement navigation logic for each tab
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Tapped tab: ${index + 1}')),
-    );
-  }
+  // void _onNavBarTap(int index) {
+  //   setState(() {
+  //     _currentIndex = index;
+  //   });
+  //   // TODO: Implement navigation logic for each tab
+  //   ScaffoldMessenger.of(context).showSnackBar(
+  //     SnackBar(content: Text('Tapped tab: ${index + 1}')),
+  //   );
+  // }
 
   void _onAccept() {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -136,11 +136,11 @@ class _ReviewRequisitionScreenState extends State<ReviewRequisitionScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: CustomBottomNavBar(
-        role: 'accountsOfficer',
-        currentIndex: _currentIndex,
-        onTap: _onNavBarTap,
-      ),
+      // bottomNavigationBar: CustomBottomNavBar(
+      //   role: 'accountsOfficer',
+      //   currentIndex: _currentIndex,
+      //   onTap: _onNavBarTap,
+      // ),
     );
   }
 
