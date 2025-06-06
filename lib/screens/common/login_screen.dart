@@ -99,14 +99,23 @@ class _LoginScreenState extends State<LoginScreen> {
     final email = emailController.text.trim();
     final password = passwordController.text.trim();
 
+    if (email == 'account@gmail.com' && password == '1234') {
+      final prefs = await SharedPreferences.getInstance();
+      if (rememberMe) {
+        await prefs.setBool('isLoggedIn', true);
+        await prefs.setString('userRole', 'AccountOfficer');
+      }
+      debugPrint('Login successful for Account Officer');
+      Navigator.pushReplacementNamed(context, '/account_home');
+      return;
+    }
+
     if (email == dummyUser.email && password == '1234') {
       final prefs = await SharedPreferences.getInstance();
-
       if (rememberMe) {
         await prefs.setBool('isLoggedIn', true);
         await prefs.setString('userRole', _mapRoleToString(dummyUser.role));
       }
-
       debugPrint('Login successful for ${dummyUser.name}');
       Navigator.pushReplacementNamed(
         context,
