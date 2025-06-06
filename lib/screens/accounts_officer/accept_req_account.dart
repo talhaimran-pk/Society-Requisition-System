@@ -19,6 +19,19 @@ class _ApprovedRequisitionsScreenState extends State<ApprovedRequisitionsScreen>
     {'name': 'Event 13', 'date': '28/05/25'},
   ];
 
+  void _onNavBarTap(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+    if (index == 0) {
+      Navigator.pushReplacementNamed(context, '/account_home');
+    } else if (index == 2) {
+      Navigator.pushReplacementNamed(context, '/approved_requisitions');
+    } else if (index == 3) {
+      Navigator.pushReplacementNamed(context, '/rejected_requisitions');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final filtered = requisitions.where((req) => req['name']!.toLowerCase().contains(_search.toLowerCase())).toList();
@@ -122,7 +135,7 @@ class _ApprovedRequisitionsScreenState extends State<ApprovedRequisitionsScreen>
       bottomNavigationBar: CustomBottomNavBar(
         role: 'accountsOfficer',
         currentIndex: _currentIndex,
-        onTap: (idx) => setState(() => _currentIndex = idx),
+        onTap: _onNavBarTap,
       ),
     );
   }

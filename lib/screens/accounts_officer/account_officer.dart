@@ -9,7 +9,7 @@ class ReviewRequisitionScreen extends StatefulWidget {
 }
 
 class _ReviewRequisitionScreenState extends State<ReviewRequisitionScreen> {
-  int _currentIndex = 2;
+  int _currentIndex = 0;
   final TextEditingController _commentController = TextEditingController();
 
   void _onNavBarTap(int index) {

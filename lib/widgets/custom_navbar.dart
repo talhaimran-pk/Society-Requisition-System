@@ -17,18 +17,23 @@ class CustomBottomNavBar extends StatelessWidget {
 
     // Dynamically create navigation items based on the role
     if (role == 'chairperson' ||
-        role == 'studentAffairs' ||
-        role == 'accountsOfficer') {
+        role == 'studentAffairs') {
       // These roles will have 3 items (for example)
       items = [
         const BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-
         const BottomNavigationBarItem(icon: Icon(Icons.add), label: 'Add'),
         const BottomNavigationBarItem(
           icon: Icon(Icons.pending),
           label: 'Status',
         ),
         const BottomNavigationBarItem(icon: Icon(Icons.receipt), label: 'All'),
+      ];
+    } else if (role == 'accountsOfficer') {
+      items = [
+        const BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+        const BottomNavigationBarItem(icon: Icon(Icons.add), label: 'Add'),
+        const BottomNavigationBarItem(icon: Icon(Icons.check_circle), label: 'Accept'),
+        const BottomNavigationBarItem(icon: Icon(Icons.cancel), label: 'Reject'),
       ];
     } else {
       // Default roles with only 2 items
