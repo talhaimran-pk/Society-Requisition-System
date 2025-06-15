@@ -4,14 +4,14 @@ import 'package:society_requisition_system/models/user.dart';
 import 'package:society_requisition_system/screens/common/hamburger_menu.dart';
 import '/widgets/custom_navbar.dart';
 
-class ChairpersonDashboardScreen extends StatelessWidget {
+class AccountDashboardScreen extends StatelessWidget {
   final User user;
-  final VoidCallback onGoToAdd; // ✅ added callback
+  final VoidCallback onGoToReview; // ✅ added callback
 
-  const ChairpersonDashboardScreen({
+  const AccountDashboardScreen({
     Key? key,
     required this.user,
-    required this.onGoToAdd, // ✅ required callback
+    required this.onGoToReview, // ✅ required callback
   }) : super(key: key);
 
   @override
@@ -38,7 +38,7 @@ class ChairpersonDashboardScreen extends StatelessWidget {
 
               CreateEventButton(
                 onPressed: () {
-                  onGoToAdd();
+                  onGoToReview();
                 },
               ),
 
@@ -46,9 +46,9 @@ class ChairpersonDashboardScreen extends StatelessWidget {
 
               RecentRequestsCard(
                 requests: [
-                  {'title': 'TechFest', 'status': 'approved'},
-                  {'title': 'Seminar', 'status': 'pending'},
-                  {'title': 'Industrial Visit', 'status': 'rejected'},
+                  {'title': 'TechFest'},
+                  {'title': 'Seminar'},
+                  {'title': 'Industrial Visit'},
                 ],
               ),
 
@@ -100,8 +100,8 @@ class CreateEventButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 16),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
       ),
-      icon: const Icon(Icons.add_circle_outline),
-      label: const Text('Create New Event Request'),
+      icon: const Icon(Icons.preview),
+      label: const Text('Review Requisitions'),
       onPressed: onPressed,
     );
   }
@@ -123,7 +123,7 @@ class RecentRequestsCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Recent Requests',
+              'New Requests',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
@@ -138,10 +138,10 @@ class RecentRequestsCard extends StatelessWidget {
                     '- ${req['title']}',
                     style: const TextStyle(color: Colors.black),
                   ),
-                  Text(
-                    'Status: ${_statusIcon(req['status'])}',
-                    style: const TextStyle(color: Colors.black),
-                  ),
+                  // Text(
+                  //   'Status: ${_statusIcon(req['status'])}',
+                  //   style: const TextStyle(color: Colors.black),
+                  // ),
                 ],
               ),
             ),
@@ -151,18 +151,18 @@ class RecentRequestsCard extends StatelessWidget {
     );
   }
 
-  String _statusIcon(String? status) {
-    switch (status) {
-      case 'approved':
-        return '✔';
-      case 'pending':
-        return '?';
-      case 'rejected':
-        return '✖';
-      default:
-        return '';
-    }
-  }
+  // String _statusIcon(String? status) {
+  //   switch (status) {
+  //     case 'approved':
+  //       return '✔';
+  //     case 'pending':
+  //       return '?';
+  //     case 'rejected':
+  //       return '✖';
+  //     default:
+  //       return '';
+  //   }
+  // }
 }
 
 class SummaryCard extends StatelessWidget {

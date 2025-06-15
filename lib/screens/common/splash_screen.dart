@@ -22,10 +22,15 @@ class _SplashScreenState extends State<SplashScreen> {
     final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
     final userRole = prefs.getString('userRole') ?? '';
 
+    // debugPrint('Splash Screen(1)');
+
     if (isLoggedIn) {
       Navigator.pushReplacementNamed(context, _getHomeRoute(userRole));
+      // debugPrint('Login before true(2)');
+      debugPrint(_getHomeRoute(userRole));
     } else {
       Navigator.pushReplacementNamed(context, '/login');
+      // debugPrint('Login before false(3)');
     }
   }
 

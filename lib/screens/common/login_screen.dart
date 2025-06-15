@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '/widgets/custom_text_field.dart';
@@ -5,6 +6,7 @@ import '/widgets/password_field.dart';
 import '/widgets/custom_button.dart';
 import '/widgets/custom_toggle.dart';
 import '/models/user.dart';
+import '/services/auth_service.dart'; // Make sure this exists and login() is implemented
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -17,16 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   bool rememberMe = false;
-
-  // Dummy user
-  final User dummyUser = User(
-    id: '1',
-    name: 'Jamil Sawar',
-    email: 'jamil@123.com',
-    designation: 'C.P Programming Society',
-    profilePictureUrl: '', // leave empty or provide a dummy URL
-    role: UserRole.chairperson,
-  );
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +77,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       },
                     ),
                     const SizedBox(height: 30),
-                    CustomButton(text: 'Log In', onPressed: _handleLogin),
+                    isLoading
+                        ? const Center(child: CircularProgressIndicator())
+                        : CustomButton(text: 'Log In', onPressed: _handleLogin),
                   ],
                 ),
               ),
@@ -98,24 +93,48 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> _handleLogin() async {
     final email = emailController.text.trim();
     final password = passwordController.text.trim();
+    debugPrint('Email $email');
+    debugPrint('Password $password');
 
-    if (email == dummyUser.email && password == '1234') {
-      final prefs = await SharedPreferences.getInstance();
-
-      if (rememberMe) {
-        await prefs.setBool('isLoggedIn', true);
-        await prefs.setString('userRole', _mapRoleToString(dummyUser.role));
-      }
-
-      debugPrint('Login successful for ${dummyUser.name}');
-      Navigator.pushReplacementNamed(
-        context,
-        _getHomeRoute(_mapRoleToString(dummyUser.role)),
-      );
-    } else {
+    if (email.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Invalid email or password')),
+        const SnackBar(content: Text('Please enter email and password')),
       );
+      return;
+    }
+
+    setState(() => isLoading = true);
+
+    try {
+      final User? user = await AuthService.login(email, password);
+
+      if (user != null) {
+        final prefs = await SharedPreferences.getInstance();
+
+        if (rememberMe) {
+          await prefs.setBool('isLoggedIn', true);
+          await prefs.setString('userRole', _mapRoleToString(user.role));
+          await prefs.setString('signedInUser', jsonEncode(user.toJson()));
+        }
+
+        debugPrint('Login successful for ${user.name}');
+
+        Navigator.pushReplacementNamed(
+          context,
+          _getHomeRoute(_mapRoleToString(user.role)),
+          arguments: user,
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Invalid email or password')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Login failed: $e')));
+    } finally {
+      setState(() => isLoading = false);
     }
   }
 

@@ -16,13 +16,9 @@ class CustomBottomNavBar extends StatelessWidget {
     List<BottomNavigationBarItem> items;
 
     // Dynamically create navigation items based on the role
-    if (role == 'chairperson' ||
-        role == 'studentAffairs' ||
-        role == 'accountsOfficer') {
-      // These roles will have 3 items (for example)
+    if (role == 'chairperson') {
       items = [
         const BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-
         const BottomNavigationBarItem(icon: Icon(Icons.add), label: 'Add'),
         const BottomNavigationBarItem(
           icon: Icon(Icons.pending),
@@ -30,13 +26,33 @@ class CustomBottomNavBar extends StatelessWidget {
         ),
         const BottomNavigationBarItem(icon: Icon(Icons.receipt), label: 'All'),
       ];
+    } else if (role == 'studentAffairs' || role == 'accountsOfficer') {
+      items = [
+        const BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+        const BottomNavigationBarItem(
+          icon: Icon(Icons.preview),
+          label: 'Review',
+        ),
+        const BottomNavigationBarItem(
+          icon: Icon(Icons.event_available),
+          label: 'Approved',
+        ),
+        const BottomNavigationBarItem(
+          icon: Icon(Icons.event_busy),
+          label: 'Rejected',
+        ),
+      ];
     } else {
-      // Default roles with only 2 items
+      // IT Head and Staff Head
       items = [
         const BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
         const BottomNavigationBarItem(
           icon: Icon(Icons.receipt),
-          label: 'Reports',
+          label: 'Pending',
+        ),
+        const BottomNavigationBarItem(
+          icon: Icon(Icons.fact_check),
+          label: 'Completed',
         ),
       ];
     }

@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:society_requisition_system/config.dart';
-import 'package:society_requisition_system/models/user.dart';
-import 'package:society_requisition_system/screens/common/hamburger_menu.dart';
-import '/widgets/custom_navbar.dart';
+import '../common/hamburger_menu.dart';
+import '/models/user.dart';
 
-class ChairpersonDashboardScreen extends StatelessWidget {
+class ItDashboardScreen extends StatelessWidget {
   final User user;
-  final VoidCallback onGoToAdd; // ✅ added callback
+  final VoidCallback onGoToPending; // ✅ added callback
 
-  const ChairpersonDashboardScreen({
+  const ItDashboardScreen({
     Key? key,
     required this.user,
-    required this.onGoToAdd, // ✅ required callback
+    required this.onGoToPending, // ✅ required callback
   }) : super(key: key);
 
   @override
@@ -36,25 +34,22 @@ class ChairpersonDashboardScreen extends StatelessWidget {
               Text('Good Day', style: Theme.of(context).textTheme.bodyMedium),
               const SizedBox(height: 20),
 
-              CreateEventButton(
-                onPressed: () {
-                  onGoToAdd();
-                },
-              ),
+              // ✅ Hook up the button to call the callback
+              PendingTaskButton(onPressed: onGoToPending),
 
               const SizedBox(height: 20),
 
-              RecentRequestsCard(
-                requests: [
-                  {'title': 'TechFest', 'status': 'approved'},
-                  {'title': 'Seminar', 'status': 'pending'},
-                  {'title': 'Industrial Visit', 'status': 'rejected'},
+              TodayTasksCard(
+                tasks: [
+                  {'title': 'TechFest'},
+                  {'title': 'LINQ Seminar'},
+                  {'title': 'Industrial Visit'},
                 ],
               ),
 
               const SizedBox(height: 20),
 
-              SummaryCard(approved: 5, rejected: 3, pending: 2),
+              SummaryCard(total: 32, today: 1, tommorrow: 2),
             ],
           ),
         ),
@@ -62,6 +57,8 @@ class ChairpersonDashboardScreen extends StatelessWidget {
     );
   }
 }
+
+// ... (Rest of the file remains the same)
 
 // TODO: Build these widgets below one by one
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -86,10 +83,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(60);
 }
 
-class CreateEventButton extends StatelessWidget {
+class PendingTaskButton extends StatelessWidget {
   final VoidCallback onPressed;
 
-  const CreateEventButton({required this.onPressed});
+  const PendingTaskButton({required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -100,17 +97,17 @@ class CreateEventButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 16),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
       ),
-      icon: const Icon(Icons.add_circle_outline),
-      label: const Text('Create New Event Request'),
+      icon: const Icon(Icons.receipt),
+      label: const Text('See Pending Tasks'),
       onPressed: onPressed,
     );
   }
 }
 
-class RecentRequestsCard extends StatelessWidget {
-  final List<Map<String, String>> requests;
+class TodayTasksCard extends StatelessWidget {
+  final List<Map<String, String>> tasks;
 
-  const RecentRequestsCard({required this.requests});
+  const TodayTasksCard({required this.tasks});
 
   @override
   Widget build(BuildContext context) {
@@ -123,23 +120,19 @@ class RecentRequestsCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Recent Requests',
+              'Today Tasks',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
             ),
             const SizedBox(height: 10),
-            ...requests.map(
+            ...tasks.map(
               (req) => Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     '- ${req['title']}',
-                    style: const TextStyle(color: Colors.black),
-                  ),
-                  Text(
-                    'Status: ${_statusIcon(req['status'])}',
                     style: const TextStyle(color: Colors.black),
                   ),
                 ],
@@ -150,30 +143,17 @@ class RecentRequestsCard extends StatelessWidget {
       ),
     );
   }
-
-  String _statusIcon(String? status) {
-    switch (status) {
-      case 'approved':
-        return '✔';
-      case 'pending':
-        return '?';
-      case 'rejected':
-        return '✖';
-      default:
-        return '';
-    }
-  }
 }
 
 class SummaryCard extends StatelessWidget {
-  final int approved;
-  final int rejected;
-  final int pending;
+  final int total;
+  final int today;
+  final int tommorrow;
 
   const SummaryCard({
-    required this.approved,
-    required this.rejected,
-    required this.pending,
+    required this.total,
+    required this.today,
+    required this.tommorrow,
   });
 
   @override
@@ -189,16 +169,14 @@ class SummaryCard extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             const Divider(),
-            Text('Total: ${approved + rejected + pending}'),
+            Text('Total: $total'),
             const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Column(children: [Text('Approved'), Text('$approved')]),
+                Column(children: [Text('Today'), Text('$today')]),
                 const VerticalDivider(),
-                Column(children: [Text('Rejected'), Text('$rejected')]),
-                const VerticalDivider(),
-                Column(children: [Text('Pending'), Text('$pending')]),
+                Column(children: [Text('Tomorrow'), Text('$tommorrow')]),
               ],
             ),
           ],
